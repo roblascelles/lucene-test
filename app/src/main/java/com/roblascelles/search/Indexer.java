@@ -1,6 +1,7 @@
 package com.roblascelles.search;
 
 import java.io.*;
+import java.nio.file.Path;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -14,15 +15,15 @@ import org.apache.lucene.store.FSDirectory;
 
 public class Indexer {
 
-    private Directory directory;
+    private Directory index;
     private StandardAnalyzer analyzer = new StandardAnalyzer();
     private IndexWriterConfig config;
     private IndexWriter writer;
 
-    public Indexer(String directory) throws IOException {
-        this.directory =  FSDirectory.open(new File(directory).toPath());
+    public Indexer(Path indexPath) throws IOException {
+        this.index = FSDirectory.open(indexPath.toAbsolutePath());
         this.config = new IndexWriterConfig(this.analyzer);
-        this.writer = new IndexWriter(this.directory, this.config);
+        this.writer = new IndexWriter(this.index, this.config);
     }
 
     public void index(String title, String isbn) throws IOException {
